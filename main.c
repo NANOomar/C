@@ -3,11 +3,13 @@
 #include <stdbool.h>
 #include <windows.h>
 
-void creatAccount();
-float checkDeposit();
-float checkWithdraw();
-float viewBalence();
-char login();
+
+float checkDeposit(float balence);
+float checkWithdraw(float balence);
+void viewBalence(float balence);
+void userprofile(char name[50] , char lastName[50] , int age);
+void setColor(int color);
+
 
 int main(){
     int option = 0;
@@ -20,13 +22,18 @@ int main(){
     bool isWorking = true;
     char userName[50] = "";
     char checkUserName[50] = "";
+    float balence = 0.0f;
 
+    setColor(10);
+    printf("          ============================\n");
+    printf("Welcom to        **NANO Bank\n");
+    printf("          ============================\n\n\n");
 
-    printf("Welcom to *NANO Bank*");
-
+    
+    setColor(7);
     //creat an  account
     printf("creat your account :)\n");
-
+    setColor(7);
     printf("enter your name :");
     fgets(name , sizeof(name) , stdin);
     name[strlen(name) - 1] = '\0';
@@ -46,13 +53,23 @@ int main(){
     printf("choose a password : ");
     fgets(password , sizeof(password) , stdin);
     password[strcspn(password , "\n")] = '\0';
-
-    printf("Don't forget your password\n");
-    printf("Your information will be hiden after 3 sec!!\n");
-    Sleep(3000);
+    setColor(12);
+    printf("!!Don't forget your password!!\n");
+    
+    for(int i = 0 ; i < 4 ; i++){
+        printf("(   )\r");
+        Sleep(600);
+        printf(" ( )\r");
+        Sleep(600);
+        printf(" ()\r");
+        Sleep(600);
+        
+    }
+    setColor(9);
     printf("^_^account created seccussfully ^_^\n");
 
     //login
+    setColor(15);
     printf("\nlogin\n");
     
     
@@ -72,28 +89,34 @@ int main(){
     } 
     }while(isWorking);
 
+    setColor(7);
+    
 
+    do{
     printf("\nChoose an option: \n");
     printf("1.Deposit \n");
-    printf("1.Withdraw \n");
-    printf("1.Check balence \n");
-    printf("1.Exit \n");
+    printf("2.Withdraw \n");
+    printf("3.Check balence \n");
+    printf("4.profile\n");
+    printf("5.Exit \n");
+    
     printf("Enter your option : ");
     scanf("%d" , &option);
 
-    do{
-
 switch(option){
         case 1:
-            checkDeposit();
+            balence = checkDeposit(balence);
             break;
         case 2:
-            checkWithdraw();
+            balence = checkWithdraw(balence);
             break;
         case 3:
-            viewBalence();
+            viewBalence(balence);
             break;
         case 4:
+            userprofile(name , lastName , age);
+            break;
+        case 5:
             printf("Don't forget *NANO BANK*");
             isRunning = false;
             break;
@@ -107,12 +130,49 @@ switch(option){
     return 0;
 }
 
-float checkDeposit(){
+float checkDeposit(float balence){
+    float amount = 0.0f;
+    bool valid = true;
+
     
+    printf("Enter amount to deposit : ");
+    scanf("%f" , &amount);
+    if(amount <= 0){
+    printf("Invalid operation\n");
+    }
+    balence += amount;
+    printf("Seccussfull operation\n");
+
+    
+
+    return balence;
 }
-float checkWithdraw(){
+float checkWithdraw(float balence){
+    float amount = 0.0f;
+
+    printf("Enter withdraw amount : ");
+    scanf("%f" , &amount);
+    if(amount > balence){
+        printf("HAHA thiefer i got you take 1$");
+        balence++;
+    }
+    else{
+        balence -= amount;
+        printf("withdraw seccessfull");
+    }
+    return balence;
 
 }
-float viewBalence(){
+void viewBalence(float balence){
+    printf(" your courrent balence is %f" , balence);
+}
+void userprofile(char name[50] , char lastName[50] , int age){
+    printf("    PROFILE    \n");
+    printf("Name : %s\n" , name);
+    printf("last name : %s\n" , lastName);
+    printf("age : %d\n" , age);
 
 }
+void setColor(int color){
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE) , color);
+} 
